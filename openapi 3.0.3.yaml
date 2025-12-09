@@ -1,0 +1,377 @@
+openapi: 3.0.3
+info:
+  title: Cbonds API
+  version: "1.0.0"
+  description: |
+    OpenAPI specification for Cbonds endpoint **get_emissions**.
+    Authentication uses login/password in request body (Test/Test).
+
+servers:
+  - url: https://ws.cbonds.info/services/json
+
+tags:
+  - name: Emissions
+    description: Endpoints for bond emissions
+
+paths:
+  /get_emissions/:
+    post:
+      tags:
+        - Emissions
+      summary: Issues main parameters
+      description: |
+        Returns issues data. 
+        Use `auth` for login/password. 
+        `filters` allow filtering by field/operator/value. 
+        `fields` specifies which fields to return. 
+        `sorting` defines sorting by field and order (asc/desc).
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth:
+                  type: object
+                  properties:
+                    login:
+                      type: string
+                      example: "Test"
+                    password:
+                      type: string
+                      example: "Test"
+                  required:
+                    - login
+                    - password
+                filters:
+                  type: array
+                  description: Filter conditions
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        type: string
+                      operator:
+                        type: string
+                      value:
+                        type: string
+                fields:
+                  type: array
+                  description: Fields to return
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        type: string
+                sorting:
+                  type: array
+                  description: Sorting order
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        type: string
+                      order:
+                        type: string
+                        enum: [asc, desc]
+              example:
+                auth:
+                  login: "Test"
+                  password: "Test"
+                fields:
+                  - field: id
+                  - field: isin_code
+                  - field: emitent_name_eng
+                sorting:
+                  - field: id
+                    order: asc
+
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EmissionItem"
+                  UserId:
+                    type: integer
+                  RequestLang:
+                    type: string
+                  meta:
+                    type: object
+              example:
+                items:
+                  - id: 1
+                    isin_code: "FR0011855287"
+                    emitent_name_eng: "Sample Corp"
+                  - id: 2
+                    isin_code: "US1234567890"
+                    emitent_name_eng: "Another Corp"
+                UserId: 123
+                RequestLang: "EN"
+                meta: {}
+
+components:
+  schemas:
+    EmissionItem:
+     type: object
+     properties:
+        id: { type: integer }
+        accounts: { type: integer }
+        agents_eng: { type: string }
+        all_bond_types: { type: string }
+        amortization_schedule_eng: { type: string }
+        announced_volume: { type: number, format: float }
+        announced_volume_new: { type: number, format: float }
+        auction_type_id: { type: integer }
+        auction_type_name_eng: { type: string }
+        bbgid: { type: string }
+        bbgid_144a: { type: string }
+        bbgid_composite: { type: string }
+        bbgid_ticker: { type: string }
+        bbgid_ticker_144a: { type: string }
+        bond_class: { type: string }
+        bond_issue_form: { type: integer }
+        bond_issue_form_name_eng: { type: string }
+        bond_rank: { type: integer }
+        bond_rank_name_eng: { type: string }
+        bond_type: { type: integer }
+        book_closing_date: { type: string, format: date }
+        book_closing_time: { type: string, format: date }
+        book_opening_date: { type: string, format: date }
+        book_opening_time: { type: string, format: date }
+        business_day_convention_id: { type: integer }
+        business_day_convention_name_eng: { type: string }
+        cbrf_listing_lombard_first_date: { type: string, format: date }
+        cbrf_listing_lombard_last_date_date: { type: string, format: date }
+        cdo_bond: { type: integer }
+        cfi_code: { type: string }
+        cfi_code_144a: { type: string }
+        coco_bond: { type: boolean }
+        code_pfts: { type: string }
+        common_code: { type: string }
+        common_code_144a: { type: string }
+        conversion_date: { type: string, format: date }
+        convert_cond_eng: { type: string }
+        convertable: { type: integer }
+        converted_from: { type: string }
+        converted_to: { type: string }
+        convertible_until: { type: string, format: date }
+        coupon_type_id: { type: integer }
+        coupon_type_name_eng: { type: string }
+        cup: { type: number, format: float }
+        cupon_eng: { type: string }
+        cupon_period: { type: integer }
+        curr_coupon_date: { type: string, format: date }
+        curr_coupon_rate: { type: number, format: float }
+        curr_coupon_sum: { type: number, format: float }
+        currency_id: { type: integer }
+        currency_name: { type: string }
+        cusip_144a: { type: string }
+        cusip_regs: { type: string }
+        cutoff_price: { type: number, format: float }
+        cutoff_yield: { type: number, format: float }
+        date_of_end_placing: { type: string, format: date }
+        date_of_start_circulation: { type: string, format: date }
+        date_of_start_placing: { type: string, format: date }
+        dcc_code: { type: string }
+        dcc_code_144a: { type: string }
+        decision_date: { type: string, format: date }
+        delay_days: { type: integer }
+        document_eng: { type: string }
+        dual_currency_bond: { type: integer }
+        early_redemption_date: { type: string, format: date }
+        emission_cbr_code: { type: string }
+        emission_coupon_rate: { type: number, format: float }
+        emission_cupon_basis_id: { type: integer }
+        emission_cupon_basis_title: { type: string }
+        emission_emitent_id: { type: integer }
+        emission_wkn_code: { type: string }
+        emission_wkn_code_144a: { type: string }
+        emitent_adress_eng: { type: string }
+        emitent_branch_id: { type: integer }
+        emitent_branch_name_eng: { type: string }
+        emitent_country: { type: integer }
+        emitent_country_name_eng: { type: string }
+        emitent_country_region_id: { type: integer }
+        emitent_country_subregion_id: { type: integer }
+        emitent_email: { type: string }
+        emitent_full_name_eng: { type: string }
+        emitent_id: { type: integer }
+        emitent_inn: { type: string }
+        emitent_inn_ua: { type: string }
+        emitent_name_eng: { type: string }
+        emitent_pages_code: { type: string }
+        emitent_phone: { type: string }
+        emitent_reg_form_id: { type: integer }
+        emitent_reg_form_name_eng: { type: string }
+        emitent_site_eng: { type: string }
+        emitent_type: { type: integer }
+        emitent_type_name_eng: { type: string }
+        eurobonds_nominal: { type: number, format: float }
+        exchanged_from: { type: string }
+        exchanged_to: { type: string }
+        first_coupon_end: { type: string, format: date }
+        floating_rate: { type: integer }
+        floating_rates_day: { type: integer }
+        floor: { type: number, format: float }
+        for_qualified_investors: { type: integer }
+        foreign_bond: { type: integer }
+        formal_emitent_branch_id: { type: integer }
+        formal_emitent_country: { type: integer }
+        formal_emitent_id: { type: integer }
+        formal_emitent_name_eng: { type: string }
+        formal_emitent_reg_form_id: { type: integer }
+        formal_emitent_type: { type: integer }
+        geography_breakdown_eng: { type: string }
+        gov_program_registration_date: { type: string, format: date }
+        gov_program_state_reg_number: { type: string }
+        green_bonds: { type: integer }
+        guaranteed_bonds: { type: integer }
+        guarantor_id: { type: integer }
+        guarantor_name_eng: { type: string }
+        has_default: { type: integer }
+        has_rating: { type: integer }
+        has_tap_issue: { type: integer }
+        has_unsettled_default: { type: integer }
+        high_coupon_guidance: { type: number, format: float }
+        high_yield_guidance: { type: number, format: float }
+        income_of_primary_placing: { type: number, format: float }
+        indexation_eng: { type: string }
+        indexation_type: { type: integer }
+        indexation_type_name_eng: { type: string }
+        initial_nominal_price: { type: number, format: float }
+        initial_placement_volume: { type: number, format: float }
+        initial_premium: { type: number, format: float }
+        integral_multiple: { type: number, format: float }
+        investment_bond: { type: integer }
+        investors_type_eng: { type: string }
+        isin_code: { type: string }
+        isin_code_144a: { type: string }
+        isin_code_3: { type: string }
+        issue_form_id: { type: integer }
+        issue_form_name_eng: { type: string }
+        kind_id: { type: integer }
+        kind_name_eng: { type: string }
+        last_replacing_date: { type: string, format: date }
+        lock_up: { type: integer }
+        low_coupon_guidance: { type: number, format: float }
+        low_yield_guidance: { type: number, format: float }
+        margin: { type: number, format: float }
+        maturity_date: { type: string, format: date }
+        maturity_period_initial: { type: integer }
+        micex_shortname: { type: string }
+        micex_shortname_eng: { type: string }
+        more_eng: { type: string }
+        mortgage_bonds: { type: integer }
+        mp_quoters_quantity: { type: integer }
+        ndc_code: { type: string }
+        next_replacing_amount: { type: number, format: float }
+        next_replacing_date: { type: string, format: date }
+        nkd_calc_types_id: { type: integer }
+        nkd_calc_types_name_eng: { type: string }
+        nominal_price: { type: number, format: float }
+        non_complex_financial_instrument: { type: integer }
+        number_of_emission: { type: string }
+        number_of_emission_eng: { type: string }
+        number_of_trades_on_issue_date: { type: integer }
+        offert_date: { type: string, format: date }
+        offert_date_call: { type: string, format: date }
+        offert_date_put: { type: string, format: date }
+        offert_eng: { type: string }
+        order_book: { type: integer }
+        other_tranches: { type: string }
+        outstanding_nominal_price: { type: number, format: float }
+        outstanding_volume: { type: number, format: float }
+        payment_currency_id: { type: integer }
+        payment_currency_name: { type: string }
+        perpetual: { type: integer }
+        pik: { type: integer }
+        placed_volume: { type: number, format: float }
+        placed_volume_new: { type: number, format: float }
+        placing_type_id: { type: integer }
+        placing_type_name_eng: { type: string }
+        precision_coupon: { type: integer }
+        precision_emission: { type: integer }
+        price_of_primary_placing: { type: number, format: float }
+        private_issue: { type: integer }
+        private_offering_id: { type: integer }
+        private_offering_name_eng: { type: string }
+        provider_emitent_id: { type: integer }
+        purpose_eng: { type: string }
+        qgc_rewrite_type: { type: integer }
+        quoters_quantity_date: { type: string, format: date }
+        record_day: { type: integer }
+        redemption_linked: { type: integer }
+        redemption_price: { type: number, format: float }
+        reference_rate_id: { type: integer }
+        reference_rate_name_eng: { type: string }
+        reg_s: { type: integer }
+        registration_date: { type: string, format: date }
+        remaining_outstand_amount: { type: number, format: float }
+        report_registration_date: { type: string, format: date }
+        restructing: { type: integer }
+        restructing_date: { type: string, format: date }
+        restructing_more_eng: { type: string }
+        resumption_date: { type: string, format: date }
+        retail_bond: { type: integer }
+        secured_debt: { type: integer }
+        securitisation: { type: integer }
+        sedol: { type: string }
+        serial_of_emission: { type: string }
+        serial_of_emission_eng: { type: string }
+        settlement_date: { type: string, format: date }
+        settlement_duration: { type: number, format: float }
+        social_bond: { type: integer }
+        sp_category_id: { type: integer }
+        sp_category_name_eng: { type: string }
+        sp_type_id: { type: integer }
+        sp_type_name_eng: { type: string }
+        spread_mid_swaps: { type: number, format: float }
+        spread_us_treasures: { type: number, format: float }
+        ss_current_trading_grounds: { type: string }
+        ss_tg_countries: { type: string }
+        ss_tg_qlists: { type: string }
+        ss_trading_grounds: { type: string }
+        state_reg_number: { type: string }
+        status_id: { type: integer }
+        status_issue_form: { type: integer }
+        status_issue_form_name_eng: { type: string }
+        structured_note: { type: integer }
+        subkind_id: { type: integer }
+        subkind_name_eng: { type: string }
+        subordinated_debt: { type: integer }
+        sukuk_bond: { type: integer }
+        suspension_date: { type: string, format: date }
+        sustainability_bond: { type: integer }
+        sustainability_linked_bond: { type: integer }
+        tg_main_exchange_eng: { type: string }
+        tg_main_exchange_id: { type: integer }
+        tg_quoters_quantity: { type: integer }
+        tgs_last_quotes_sum_volume: { type: integer }
+        total_quoters_quantity: { type: integer }
+        trace_eligible_securites: { type: integer }
+        trading_ground_name_eng: { type: string }
+        trading_grounds_full_eng: { type: string }
+        tradings_duration: { type: number, format: float }
+        tradings_indicative_price: { type: number, format: float }
+        tradings_maxdate: { type: string, format: date }
+        tradings_yield_effect: { type: number, format: float }
+        transition_bond: { type: integer }
+        underlying_class_id: { type: integer }
+        underlying_class_name_eng: { type: string }
+        underlying_instrument_code: { type: string }
+        underlying_ticker: { type: string }
+        update_time: { type: string, format: date }
+        updating_date: { type: string, format: date }
+        usd_volume: { type: number, format: float }
+        variable_rate_type_id: { type: integer }
+        vid_id: { type: integer }
+        vid_name_eng: { type: string }
